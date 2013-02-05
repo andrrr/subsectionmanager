@@ -1,3 +1,4 @@
+/*global Symphony */
 
 (function($) {
 
@@ -100,7 +101,7 @@
 					iframe = content.find('iframe');
 					
 				// Check if iframe exists
-				if(iframe.length == 0) {
+				if(iframe.length === 0) {
 					iframe = $('<iframe />').appendTo(content);
 				}
 					
@@ -125,7 +126,7 @@
 				browser.addClass('opened');
 
 				// List existing items
-				if(existing.children().length == 0) {
+				if(existing.children().length === 0) {
 					list();
 				}
 
@@ -151,7 +152,7 @@
 				var strings = $.trim($(event.target).val()).toLowerCase().split(' ');
 				
 				// Show filtered items
-				if(strings.length > 0 && strings[0] != '') {
+				if(strings.length > 0 && strings[0] !== '') {
 					search(strings);
 				}
 				
@@ -202,7 +203,7 @@
 				subsection.find('#header, #context').remove();
 				
 				// Pre-populate first input with browser content
-				if(iframe.is('.new') && searchfield.val() != '') {
+				if(iframe.is('.new') && searchfield.val() !== '') {
 					subsection.find('input:visible, textarea').eq(0).val(searchfield.val());
 				}
 				
@@ -231,7 +232,7 @@
 				subsection.find('#contents').on('resize.subsectionmanager', function(event, init) {
 					var height = subsection.find('#wrapper').outerHeight();
 
-					if(init == true || (!iframe.is('.loading') && content.data('height') !== height && height !== 0)) {
+					if(init === true || (!iframe.is('.loading') && content.data('height') !== height && height !== 0)) {
 						resize(content, iframe, body, height);
 					}
 				}).trigger('resize.subsectionmanager', [init]);
@@ -265,18 +266,18 @@
 					},
 					dataType: 'html',
 					success: function(result) {
-						var result = $(result),
-							header = result.find('> header'),
-							id = result.find('input:first');
+							result = $(result);
+							var header = result.find('> header'),
+									id = result.find('input:first');
 
 						if(header.length > 0) {
 							
-							// Update header						
+							// Update header
 							item.find('> header').replaceWith(header);
 							addDestructor(item);
 		
 							// Set id for new items
-							if(item.attr('data-value') == undefined) {
+							if(item.attr('data-value') === undefined) {
 								item.append(id).attr('data-value', id.val()).trigger('update.subsectionmanager');
 							}
 	
@@ -305,6 +306,7 @@
 			};
 						
 			// List all subsection entries
+			// TODO this is very slow
 			var list = function() {
 				$.ajax({
 					async: true,
@@ -316,16 +318,13 @@
 						section: subsection_id
 					},
 					success: function(result) {
-						var result = $(result).hide();
-
+						result = $(result);
+												
 						// Append existing items
 						existing.removeClass('empty').empty().append(result);
 
 						// Sync selection with list of existing items
 						sync();
-
-						// Reveal items
-						result.fadeIn('fast');
 					}
 				});			
 			};
@@ -357,7 +356,7 @@
 					// Items have to match all search strings
 					$.each(strings, function(count, string) {
 						var expression = new RegExp(string, 'i');
-						if(text.search(expression) == -1) {
+						if(text.search(expression) === -1) {
 							found = false;
 						}
 					});
@@ -373,7 +372,7 @@
 				count(size);
 				
 				// Hide list
-				if(size == 0) {
+				if(size === 0) {
 					existing.hide();
 				}
 
@@ -396,12 +395,12 @@
 					counter.show();
 
 					// No items
-					if(size == 0) {
+					if(size === 0) {
 						counter.text(Symphony.Language.get('no matches'));
 					}
 
 					// Single item
-					else if(size == 1) {
+					else if(size === 1) {
 						counter.text(Symphony.Language.get('1 match', { count: 1 }));
 					}
 
@@ -435,7 +434,7 @@
 					if(target.is('textarea')) {
 						hover(target);
 					}
-					else if(!target.is('.dropper') && !target.is('.dragger') && target.parent('.dragger').size() == 0) {
+					else if(!target.is('.dropper') && !target.is('.dragger') && target.parent('.dragger').size() === 0) {
 						textareas.removeClass('droptarget');
 						dropper.fadeOut('fast');
 					}
@@ -485,7 +484,7 @@
 					dragger.fadeOut('fast');
 		
 					// Stop dragging
-					$(document).off('mouseup.subsectionmanager')
+					$(document).off('mouseup.subsectionmanager');
 				}
 			};
 
@@ -501,7 +500,7 @@
 					top: offset.top - 4,
 					left: offset.left - 4
 				}).fadeIn('fast');
-			}
+			};
 
 			// Dropping items
 			var drop = function(textarea, item) {
@@ -528,7 +527,7 @@
 					text = $.trim(item.clone().find('a.destructor').remove().end().text());
 
 					// Image or file
-					if(item.find('a.file').length != 0) {
+					if(item.find('a.file').length !== 0) {
 
 						//
 						file = item.find('a.file');
@@ -602,7 +601,7 @@
 				var body = $('body');
 				
 				// Add drag helper
-				if(body.find('div.dragger').length == 0) {
+				if(body.find('div.dragger').length === 0) {
 					body.append(dragger.hide());
 				}
 				else {
@@ -610,7 +609,7 @@
 				}
 	
 				// Add drop helper
-				if(body.find('div.dropper').length == 0) {
+				if(body.find('div.dropper').length === 0) {
 					body.append(dropper.hide());
 				}
 				else {
